@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { Transaction } from './types';
@@ -6,13 +7,23 @@ import { Summary } from './components/Summary';
 import { ExpenseForm } from './components/ExpenseForm';
 import { ExpenseList } from './components/ExpenseList';
 import { GeminiAnalysis } from './components/GeminiAnalysis';
+import { Login } from './components/Login';
 import { analyzeTransactions } from './services/geminiService';
 
 const App: React.FC = () => {
+    const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>('isLoggedIn', false);
     const [transactions, setTransactions] = useLocalStorage<Transaction[]>('transactions', []);
     const [analysis, setAnalysis] = useState<string | null>(null);
     const [isLoadingAnalysis, setIsLoadingAnalysis] = useState<boolean>(false);
     const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+    const handleLogin = () => {
+        setIsLoggedIn(true);
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+    };
 
     const handleAddTransaction = (newTransactionData: Omit<Transaction, 'id'>) => {
         const newTransaction: Transaction = {
@@ -44,9 +55,13 @@ const App: React.FC = () => {
         }
     }, [transactions]);
 
+    if (!isLoggedIn) {
+        return <Login onLogin={handleLogin} />;
+    }
+
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
-            <Header />
+            <Header onLogout={handleLogout} />
             <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left/Top column */}
