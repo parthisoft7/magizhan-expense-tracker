@@ -1,0 +1,5 @@
+{
+  "name": "INR Finance Tracker",
+  "description": "A modern, responsive finance tracking application to manage your income and expenses in Indian Rupees (INR). It allows you to add, view, and delete transactions from different accounts like GPay or Cash, visualizes your spending habits, and leverages AI for financial insights.",
+  "requestFramePermissions": []
+}
